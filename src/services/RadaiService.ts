@@ -65,24 +65,41 @@ export default class RadaiService {
                 this._commandsManager.runCommand('navigateHistory', { to: '/' });
               }
 
-              if (fhirMessage.event['hub.event'].toLowerCase().includes('diagnosticreport-select')) {
-                //console.debug('RadaiService:  imagingselection, opening ' + studyUID);
-                /*
-                const studyUID = fhirMessage.event.context[1].resources[0].studyUid;
-                const seriesUID = fhirMessage.event.context[1].resources[0].seriesUid;
-                console.debug('FhircastService:  imagingselection, opening ' + studyUID);
-                this._commandsManager.runCommand('navigateHistory', {
-                  to:
-                    '/viewer?StudyInstanceUIDs=' +
-                    studyUID +
-                    '&SeriesInstanceUIDs=' +
-                    seriesUID +
-                    '&FHIRcast',
-                });
-    
-                */
+              if (fhirMessage.event['hub.event'].toLowerCase().includes('diagnosticreport-opened')) {
+                       
+                const accNbr=fhirMessage.event.context[2].resource.identifier[0].value;
+                console.debug('RadaiService:  diagnosticreport-opened, opening accession ' + accNbr);
+                this._commandsManager.runCommand('navigateHistory',{to:'/?accession='+accNbr});
               }
 
+              if (fhirMessage.event['hub.event'].toLowerCase().includes('diagnosticreport-select')) {
+                if(fhirMessage.event.context[1].key=='select') {
+                  const measurementID=fhirMessage.event.context[1].resources[0].id;
+                  console.debug('RadaiService:  imagingselection, opening measurement ',measurementID );
+                  
+                }
+                else {
+                    /*
+                  const accNbr=fhirMessage.event.context[2].resource.identifier[0].value;
+                  console.debug('RadaiService:  imagingselection, opening accession ' + accNbr);
+                  this._commandsManager.runCommand('navigateHistory',{to:'/?accession='+accNbr});
+
+
+                  const studyUID = fhirMessage.event.context[1].resources[0].studyUid;
+                  const seriesUID = fhirMessage.event.context[1].resources[0].seriesUid;
+                  console.debug('FhircastService:  imagingselection, opening ' + studyUID);
+                  this._commandsManager.runCommand('navigateHistory', {
+                    to:
+                      '/viewer?StudyInstanceUIDs=' +
+                      studyUID +
+                      '&SeriesInstanceUIDs=' +
+                      seriesUID +
+                      '&FHIRcast',
+                  });
+      
+                */                
+              }
+            }
           }
         );
   }

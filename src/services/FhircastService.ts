@@ -175,16 +175,17 @@ export default class FhircastService extends PubSubService {
       if (response.status == 200) {
         const config = await response.json();
         if (config.access_token) {
-          console.debug('FhircastService:  Token received: ', config.access_token);
+          console.debug('FhircastService:  Token received.');
           this.hub.token = config.access_token;
           this._broadcastEvent(FhircastService.EVENTS.TOKEN_ACQUIRED, {});
         }
         if (this.hub.productName === 'RAD-AI') {
-          config.topic = 'ohif';
-          this.setTopic('ohif');
+          config.topic = this.hub.topic;
+          //this.setTopic('ohif');
         }
+
         if (config.topic) {
-          console.debug('FhircastService:  Topic received: ', config.topic);
+          console.debug('FhircastService:  Topic received.', config.topic);
           this.setTopic(config.topic);
           if (this.fhircastConfig.autoStart) {
             this.fhircastSubscribe();
@@ -260,6 +261,7 @@ export default class FhircastService extends PubSubService {
           this._broadcastEvent(FhircastService.EVENTS.FHIRCAST_MESSAGE, {fhirMessage});
 
           // Check if the topic is different.  This means we are entering a conference
+          /* 
           if (fhirMessage.event['hub.topic'].toLowerCase() !== this.hub.topic) {
             console.debug('FhircastService:  Conference starting');
             const { UIModalService } = this._servicesManager.services;
@@ -273,9 +275,9 @@ export default class FhircastService extends PubSubService {
                 },
               });
             }
-            this.conferenceApproved = true;
+            this.conferenceApproved = true;    
           }
-
+          */
         }
       }
     } catch (err) {
