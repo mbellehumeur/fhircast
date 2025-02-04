@@ -24,7 +24,7 @@ export default class RadaiService {
     console.debug('RadaiService: creating service ');
     this._commandsManager = commandsManager;
 
-    const { MeasurementService } = servicesManager.services;
+    const { MeasurementService, FhircastService ,viewportGridService } = servicesManager.services;
 
     const {MEASUREMENT_ADDED, MEASUREMENT_REMOVED, MEASUREMENTS_CLEARED, MEASUREMENT_UPDATED, RAW_MEASUREMENT_ADDED } =
     MeasurementService.EVENTS;
@@ -40,7 +40,7 @@ export default class RadaiService {
         }
       );
 
-      const { FhircastService } = servicesManager.services;
+
 
       const {FHIRCAST_MESSAGE, } =
       FhircastService.EVENTS;
@@ -69,14 +69,17 @@ export default class RadaiService {
                        
                 const accNbr=fhirMessage.event.context[2].resource.identifier[0].value;
                 console.debug('RadaiService:  diagnosticreport-opened, opening accession ' + accNbr);
-                this._commandsManager.runCommand('navigateHistory',{to:'/?accession='+accNbr});
+                this._commandsManager.runCommand('navigateHistory',{to:'/?accession='+accNbr+'&FHIRcast'});
+                // Look up studyUID
+
+
               }
 
               if (fhirMessage.event['hub.event'].toLowerCase().includes('diagnosticreport-select')) {
                 if(fhirMessage.event.context[1].key=='select') {
                   const measurementID=fhirMessage.event.context[1].resources[0].id;
                   console.debug('RadaiService:  imagingselection, opening measurement ',measurementID );
-                  
+                  MeasurementService.jumpToMeasurement(viewportGridService.getActiveViewportId(),measurementID);
                 }
                 else {
                     /*
