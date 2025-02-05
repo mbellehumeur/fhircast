@@ -36,7 +36,6 @@ const fhirContext={
                           value: accessionNumber,
                         },
                       ],
-                 //     started: '2024-01-01T00:00:00.000Z',
                     },
   
                   },
@@ -62,7 +61,6 @@ const fhirContext={
                         system: 'http://unitsofmeasure.org',
                         code: 'mm',
                       },
-                //      started: '2024-01-01T00:00:00.000Z',
                     },
                   },
                   {
@@ -79,8 +77,7 @@ const fhirContext={
                           type: 'ImagingStudy',
                           identifier: {
                             system: 'urn:dicom:uid',
-                            value:
-                              'urn:oid:1.2.840.113747.20080222.35738358372924306270412538783781',
+                            value:'urn:oid:'+measurement.referenceStudyUID,
                           },
                         },
                       ],

@@ -69,7 +69,7 @@ export default class RadaiService {
                        
                 const accNbr=fhirMessage.event.context[2].resource.identifier[0].value;
                 console.debug('RadaiService:  diagnosticreport-opened, opening accession ' + accNbr);
-                this._commandsManager.runCommand('navigateHistory',{to:'/?accession='+accNbr+'&FHIRcast'});
+              //  this._commandsManager.runCommand('navigateHistory',{to:'/?accession='+accNbr+'&FHIRcast'});
                 // Look up studyUID
 
 

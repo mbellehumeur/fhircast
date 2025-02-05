@@ -17,10 +17,17 @@ export default function getCommandsModule({
       console.log('Fhircast sent.');
       FhircastService.fhircastPublish(fhircastMessage)
     },
+    sendPriorToReport: ({ studyUID}) => {
+      console.log('Fhircast sendPriorToReport.');
+      //FhircastService.fhircastPublish(fhircastMessage)
+    },
   }
   const definitions = {
     sendFhircast: {
       commandFn: actions.sendFhircast,
+    },
+    sendPriorToReport: {
+      commandFn: actions.sendPriorToReport,
     },
   };
 
