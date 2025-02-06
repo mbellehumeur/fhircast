@@ -16,8 +16,7 @@ FhircastService
 
 */
 import { ServicesManager, CommandsManager, ExtensionManager, PubSubService } from '@ohif/core';
-import { ConferenceModal } from './conferenceModal';
-
+import { ConferenceModal } from './utils/conferenceModal';
 
 export default class FhircastService extends PubSubService {
   private _extensionManager: ExtensionManager;
@@ -32,8 +31,6 @@ export default class FhircastService extends PubSubService {
     TOKEN_ACQUIRED: 'event::tokenAcquired',
     STUDY_CLOSE: 'event::studyClose',
   };
-
-
 
   public static REGISTRATION = servicesManager => {
     return {
@@ -66,8 +63,6 @@ export default class FhircastService extends PubSubService {
 
   public conferenceApproved = false;
   public conferenceDeclined = false;
-
- // public fhircastConfig =ExtensionManager.appConfig.fhircast;
   
   constructor(
     extensionManager: ExtensionManager,
@@ -362,7 +357,7 @@ export default class FhircastService extends PubSubService {
       body: message,
     };
     try {
-      console.debug('FhircastService: Publishing message to FHIRcast hub: ' + message);
+      console.debug('FhircastService: Publishing message to FHIRcast hub: ' + fhircastMessage);
      // let hubEndpoint = this.hub.hub_endpoint + '/' + this.hub.topic;
      let hubEndpoint = hub.hub_endpoint + '/' + hub.topic;
      

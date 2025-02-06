@@ -1,6 +1,6 @@
 import { ServicesManager, CommandsManager, ExtensionManager } from '@ohif/core';
 import OHIF, { Types, errorHandler } from '@ohif/core';
-import createDRupdatefromMeasurement from './utils/createDRupdatefromMeasurement'
+import createDRupdatefromMeasurement from '../utils/createDRupdatefromMeasurement'
 
 export default class IHEService {
   private _extensionManager: ExtensionManager;

@@ -1,6 +1,6 @@
 import { id } from './id';
 import FhircastService from './services/FhircastService';
-import RadaiService from './services/RadaiService';
+import RadaiService from './services/ProjectSpecific/RadaiService';
 import { Types } from '@ohif/core';
 import getCommandsModule from './getCommandsModule';
 

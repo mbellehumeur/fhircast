@@ -1,5 +1,5 @@
 import { ServicesManager, CommandsManager, ExtensionManager, DicomMetadataStore } from '@ohif/core';
-import createDRupdatefromMeasurement from './utils/createDRupdatefromMeasurement'
+import createDRupdatefromMeasurement from '../utils/createDRupdatefromMeasurement'
 
 export default class RadaiService {
   private _extensionManager: ExtensionManager;
