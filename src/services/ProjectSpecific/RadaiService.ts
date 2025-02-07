@@ -1,6 +1,18 @@
 import { ServicesManager, CommandsManager, ExtensionManager, DicomMetadataStore } from '@ohif/core';
 import createDRupdatefromMeasurement from '../utils/createDRupdatefromMeasurement'
 
+
+async function getStudiesForAcc(dataSource, acc) {
+  
+    return dataSource.query.studies.search({
+      AccessionNumber: acc,
+      disableWildcard: true,
+    });
+  
+  console.log('No study found for', acc);
+  return acc;
+}
+
 export default class RadaiService {
   private _extensionManager: ExtensionManager;
   private _servicesManager: ServicesManager;
@@ -25,7 +37,7 @@ export default class RadaiService {
     this._commandsManager = commandsManager;
 
     const { MeasurementService, FhircastService ,viewportGridService } = servicesManager.services;
-
+    let currentMeasurement='';
     const {MEASUREMENT_ADDED, MEASUREMENT_REMOVED, MEASUREMENTS_CLEARED, MEASUREMENT_UPDATED, RAW_MEASUREMENT_ADDED } =
     MeasurementService.EVENTS;
     MeasurementService.subscribe(
@@ -35,12 +47,41 @@ export default class RadaiService {
           const fhirContext= createDRupdatefromMeasurement(addedMeasurementId,studyMeta);
           const hub=FhircastService.getHub();
           const response =  FhircastService.fhircastPublish(fhirContext,hub);
-          console.debug('RadaiService: sending measurement ',fhirContext);
+          console.debug('RadaiService: adding measurement ',fhirContext);
+          currentMeasurement=addedMeasurementId.isLocked;
         //    this._commandsManager.runCommand('sendFhircast', fhirContext ,'FHIRCAST');
         }
       );
 
+      MeasurementService.subscribe(
+        MEASUREMENT_UPDATED,
+        ({ source, measurement: addedMeasurementId }) => {
+          
+          if (addedMeasurementId.isLocked) {
+            /*
+            const studyMeta = DicomMetadataStore.getStudy(addedMeasurementId.referenceStudyUID);
+            const fhirContext= createDRupdatefromMeasurement(addedMeasurementId,studyMeta);
+            const hub=FhircastService.getHub();
+            const response =  FhircastService.fhircastPublish(fhirContext,hub);
+            */
+            console.debug('RadaiService: updating measurement ');
+          }
+        }
+      );
 
+      MeasurementService.subscribe(
+        MEASUREMENT_REMOVED,
+        ({ source, measurement: addedMeasurementId }) => {
+          /*
+          const studyMeta = DicomMetadataStore.getStudy(addedMeasurementId.referenceStudyUID);
+          const fhirContext= createDRupdatefromMeasurement(addedMeasurementId,studyMeta);
+          const hub=FhircastService.getHub();
+          const response =  FhircastService.fhircastPublish(fhirContext,hub);
+          */
+          console.debug('RadaiService: removing measurement ');
+          
+        }
+      );
 
       const {FHIRCAST_MESSAGE, } =
       FhircastService.EVENTS;
